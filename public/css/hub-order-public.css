@@ -1,0 +1,17 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+ .hub_table
+ {
+    width: 100%;
+    border-collapse: collapse;
+ }
+ .hub-margin-bottom{
+   margin-bottom:5px !important;
+ }
+ .dt-container .dt-search .dt-input
+ {
+   width: 50% !important;
+ }
