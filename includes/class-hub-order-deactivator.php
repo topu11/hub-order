@@ -30,6 +30,21 @@ class Hub_Order_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
+		$timestamp = wp_next_scheduled('hub_order_sync_cron_event');
+		wp_unschedule_event($timestamp, 'hub_order_sync_cron_event');
+
+		$slugs=['manage-single-order','manage-orders'];
+		foreach($slugs as $key=>$value)
+		{
+			$page_slug = $value; 
+			$page = get_page_by_path($page_slug);
+			if ($page) {
+				wp_delete_post($page->ID, true);
+			}
+		}
+		
+
+		
 
 	}
 

@@ -35,12 +35,12 @@ class Hub_Order_Activator {
 		//$slugs=['manage-single-order','manage-oders'];
 		$slugs_shortcode_mapping=[
 			'manage-single-order'=>'manage_oders_single',
-			'manage-oders'=>'manage_oders_functionalities'
+			'manage-orders'=>'manage_oders_functionalities'
 		];
 
 		$title_slug_mapping=[
 			'manage-single-order'=>'Manage Single Order',
-			'manage-oders'=>'Manage Orders'
+			'manage-orders'=>'Manage Orders'
 		];
         
 		foreach($slugs_shortcode_mapping as $key=>$value)
@@ -65,12 +65,15 @@ class Hub_Order_Activator {
 					'post_content'=>$shortcode,
 					'post_status'=>'publish',
 					'post_type'=>'page',
+					'post_name' => $the_slug 
 				];
 				wp_insert_post($wp_post_data);
 			}
 		}
 
-
+		if (!wp_next_scheduled('hub_order_sync_cron_event')) {
+			wp_schedule_event(time(), 'every_two_minutes', 'hub_order_sync_cron_event');
+		}
 		
 
 	}

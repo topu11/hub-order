@@ -196,6 +196,9 @@ class Hub_Order {
 		 $this->loader->add_action( 'wp_ajax_change_order_status', $plugin_admin, 'change_order_status' );
 
 		 $this->loader->add_action( 'wp_ajax_order_json_update', $plugin_admin, 'order_json_update' );
+		 
+		 $this->loader->add_filter( 'cron_schedules', $plugin_admin, 'hub_order_cron_schedule' );
+		 $this->loader->add_action( 'hub_order_sync_cron_event', $plugin_admin, 'hub_order_sync_cron_event_callback' );
 	}
 
 	/**

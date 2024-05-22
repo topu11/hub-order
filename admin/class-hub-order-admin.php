@@ -127,6 +127,9 @@ class Hub_Order_Admin {
 		add_submenu_page('options.php', 'Shop Update', 'Shop Update', 'manage_options', 'hub-order-shop-update', array( $this, 'hub_order_shop_update' ));
 
    		add_submenu_page('hub-order-custom-settings-page', 'Add new Shop', 'Add new Shop', 'manage_options', 'hub-order-shop-create', array( $this, 'hub_order_shop_create' ));
+
+
+		   add_submenu_page('hub-order-custom-settings-page', 'Set cron Time', 'Set cron Time', 'manage_options', 'hub-order-cron-create', array( $this, 'hub_order_cron_create' ));
 	}
 	public function render_custom_settings_page()
 	{
@@ -180,5 +183,49 @@ class Hub_Order_Admin {
 			'success'=>'success',
 		]);
        wp_die();
+	}
+	public function hub_order_cron_schedule()
+	{
+		$schedules['every_two_minutes'] = array(
+			'interval' => 120, 
+			'display'  => esc_html__('Every Two Minutes'),
+		);
+		$schedules['every_one_minutes'] = array(
+			'interval' => 60, 
+			'display'  => esc_html__('Every One Minutes'),
+		);
+		$schedules['every_three_minutes'] = array(
+			'interval' => 180, 
+			'display'  => esc_html__('Every Three Minutes'),
+		);
+		$schedules['every_five_minutes'] = array(
+			'interval' => 300, 
+			'display'  => esc_html__('Every five Minutes'),
+		);
+		$schedules['every_ten_minutes'] = array(
+			'interval' => 600, 
+			'display'  => esc_html__('Every Ten Minutes'),
+		);
+		$schedules['every_thirty_minutes'] = array(
+			'interval' => 1800, 
+			'display'  => esc_html__('Every Thirty Minutes'),
+		);
+		$schedules['every_sixty_minutes'] = array(
+			'interval' => 3600, 
+			'display'  => esc_html__('Every Sixty Minutes'),
+		);
+		return $schedules;
+	}
+	public function hub_order_sync_cron_event_callback()
+	{
+		$cache_path=dirname( __FILE__,2).'/includes/order-data-json-cache.js';
+        $order_data_database=Hub_order_manage_orders::order_table_gerenator();
+		
+        file_put_contents($cache_path,json_encode($order_data_database));
+		error_log("Cron at ".time());
+	}
+	public function hub_order_cron_create()
+	{
+		require_once( dirname( __FILE__ ).'/partials/settings/cron.php' );
 	}
 }
